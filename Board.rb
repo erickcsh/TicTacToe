@@ -28,6 +28,10 @@ class Board
   def fill_board_space(position, player_number)
     @board[position.row][position.col] = player_number
   end
+
+  def is_position_empty?(position)
+    @board[position.row][position.col] == 0
+  end
 end
 
 Board.new.print_board
