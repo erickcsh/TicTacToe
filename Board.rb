@@ -32,6 +32,8 @@ class Board
   def is_position_empty?(position)
     @board[position.row][position.col] == 0
   end
-end
 
-Board.new.print_board
+  def get_empty_postions
+
+  end
+end
