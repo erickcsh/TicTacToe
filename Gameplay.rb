@@ -32,6 +32,33 @@ class Gameplay
 
   def player_turn
     display_turn_status
+    input = get_player_valid_input
+    check_input(input)
+  end
+
+  def check_input(input)
+    is_quit_reset_option?(input) ? quit_reset_option_action(input) : completed_player_move(input)
+  end
+
+  def is_quit_reset_option?(option)
+    option = option.downcase
+    option.eql?("quit") || option.eql?("reset")
+  end
+
+  def quit_reset_option_action(option)
+    option = option.downcase
+    option.eql?("quit") ? quit : reset
+  end
+
+  def quit
+
+  end
+
+  def reset
+    
+  end
+
+  def completed_player_move
 
   end
 
