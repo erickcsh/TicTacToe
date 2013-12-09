@@ -1,8 +1,8 @@
 class Gameplay
   
-  def initialize(player1, player2)
+  def initialize(players)
     @board = Board.new
-    @players = [player1, player2]
+    @players = players
     @turn = rand(1)
     @game_finished = false
     @reset = false
@@ -17,7 +17,7 @@ class Gameplay
 
   def play
     while !game_finished? do
-      
+      player_turn
     end
     check_for_finish_flags
   end
@@ -28,5 +28,16 @@ class Gameplay
 
   def game_finished?
     @game_finished
+  end
+
+  def player_turn
+    display_turn_status
+
+  end
+
+  def display_turn_status
+    system "clear"
+    @board.display
+    puts "\n\n #{@players[@turn].name} turn"
   end
 end
