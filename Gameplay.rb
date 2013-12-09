@@ -1,6 +1,10 @@
 class Gameplay
   
   def initialize(players)
+    prepare_initial_conditions
+  end
+
+  def prepare_initial_conditions
     @board = Board.new
     @players = players
     @turn = rand(1)
@@ -19,11 +23,6 @@ class Gameplay
     while !game_finished? do
       player_turn
     end
-    check_for_finish_flags
-  end
-
-  def check_for_finish_flags
-    true
   end
 
   def game_finished?
@@ -34,6 +33,10 @@ class Gameplay
     display_turn_status
     input = get_player_valid_input
     check_input(input)
+  end
+
+  def get_player_valid_input
+    'quit'
   end
 
   def check_input(input)
@@ -51,15 +54,39 @@ class Gameplay
   end
 
   def quit
-
+    @game_finished = true
+    @quit = true
   end
 
   def reset
-    
+    prepare_initial_conditions
   end
 
-  def completed_player_move
+  def completed_player_move(input)
+    @board.fill_board_space(GridPosition.new(input),@players[@turn].symbol)
+    check_for_ending_move
+    change_turn
+  end
 
+  def check_for_ending_move
+    system "clear"
+    @board.display
+    draw if @board.draw?
+    win if @board.win?(@player[@turn].symbol)
+  end
+
+  def draw
+    puts "Game drawn"
+    @game_finished = true
+  end
+
+  def win
+    puts "#{@players[@turn].name} won"
+    @game_finished = true
+  end
+
+  def change_turn
+    @turn = (@turn + 1) % 2
   end
 
   def display_turn_status
