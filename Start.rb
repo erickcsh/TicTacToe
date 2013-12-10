@@ -9,6 +9,7 @@ class Start
     Instructions.display_beginning_instructions
     ask_for_mode
     enter_players_name
+    start_game
   end
 
   def ask_for_mode
@@ -16,7 +17,6 @@ class Start
            1) 1 player
            2) 2 players"
    enter_mode
-   start_game
   end
 
   def enter_mode
@@ -48,7 +48,7 @@ class Start
 
   def start_game
     system "clear"
-    Gameplay.new.play
+    Gameplay.new(@players).play
   end
 end
 

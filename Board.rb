@@ -18,7 +18,7 @@ class Board
 
   def print_row(row, index)
     puts "\t#{index + 1}  #{transform_number_to_symbol(row[0])}  |  " +
-    "#{transform_number_to_symbol(row[1])}  |  #{transform_number_to_symbol(row[0])}"
+    "#{transform_number_to_symbol(row[1])}  |  #{transform_number_to_symbol(row[2])}"
     puts "\t -----------------" unless index == 2
   end
 
@@ -27,21 +27,25 @@ class Board
   end
 
   def fill_board_space(position, player_number)
+    position = GridPosition.new(position)
     @board[position.row][position.col] = player_number
   end
 
   def is_position_empty?(position)
+    position = GridPosition.new(position)
     @board[position.row][position.col] == 0
   end
 
   def get_empty_postions
-    @board.each_with_index.reduce([]) { |positions, row, index| positions << get_col_empty_positions(row, index) }
+    @board.each_with_index.reduce([]) { |positions, row_with_index| positions << get_col_empty_positions(row_with_index.first, row_with_index.last) }.flatten!
   end
 
   def get_col_empty_positions(row, index)
     letter = index_to_letter(index)
-    row.each_with_index.reduce([]) { |positions, element, index_col|
-                                         positions << "#{letter},#{index_col + 1}" if element == 0}
+    row.each_with_index.reduce([]) do |positions, element_with_index|  
+                                       letter = index_to_letter(element_with_index.last)
+                                       element_with_index.first == 0 ?  positions << "#{letter},#{index + 1}" : positions
+    end
   end
 
   def index_to_letter(index)
@@ -92,7 +96,7 @@ class Board
     @board[2][2] == player_number
   end
 
-  def left_to_right_diagonal_win?(player_number)
+  def right_to_left_diagonal_win?(player_number)
     @board[0][2] == player_number &&
     @board[1][1] == player_number &&
     @board[2][0] == player_number

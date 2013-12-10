@@ -18,6 +18,6 @@ class Player
 
   def receive_player_input
     puts "Select the position"
-    STDIN.gets.chomp
+    position = STDIN.gets.chomp
   end
 end
