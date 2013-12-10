@@ -29,4 +29,5 @@ class Player
     puts "Select the position"
     position = STDIN.gets.chomp
   end
+
 end

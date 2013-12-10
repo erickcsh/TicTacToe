@@ -88,6 +88,7 @@ class Gameplay
     prepare_initial_conditions(@players)
   end
 
+
   def completed_player_move(input)
     @board.fill_board_space(input,@players[@turn].symbol)
     check_for_ending_move

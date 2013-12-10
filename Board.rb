@@ -48,6 +48,7 @@ class Board
     end
   end
 
+
   def index_to_letter(index)
     DICTIONARY_INDEX_LETTER[index]
   end

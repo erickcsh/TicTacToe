@@ -22,4 +22,5 @@ class GridPosition
   def self.is_valid_position_string(selection)
     !selection.gsub(" ","").match(/^[ABC],[123]$/).nil?
   end
+
 end

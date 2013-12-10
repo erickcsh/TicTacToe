@@ -1,6 +1,6 @@
 module Instructions
 
-  INSTRUCTIONS_AT_BEGINNING = "\t\t Welcome to Tic Tac Toe 
+  INSTRUCTIONS_AT_BEGINNING = "\n\n\t\t Welcome to Tic Tac Toe 
                               
 The extremely fun experience of playing such an amazing game as Tic Tac Toe. This game is really popular
 and we do not want to delay you more but here are some instructions for using this game.
