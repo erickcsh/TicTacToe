@@ -9,7 +9,25 @@ class Start
     Instructions.display_beginning_instructions
     ask_for_mode
     enter_players_name
-    start_game
+    play_until_no_more_retry
+  end
+
+  def play_until_no_more_retry
+    retry = true
+    while !retry
+      start_game
+      retry = ask_for_retry
+    end
+  end
+
+  def ask_for_retry
+    puts "Do you want to play again [Y/N]"
+    retry = STDIN.gets.chomp
+    wants_to_retry?(retry)
+  end
+
+  def wants_to_retry?(retry)
+    retry.downcase.eql?('y')
   end
 
   def ask_for_mode
