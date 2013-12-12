@@ -15,6 +15,12 @@ module TicTacToe
 	  def rows
 	    @board 
 	  end
+	  
+	  def cols
+	    @board.each_with_index.map do |row, row_index|
+	      @board.map { |row| row[row_index] }
+	    end
+	  end
 		
   	def fill_board_space(position, player_number)
   		position = GridPosition.new(position)
