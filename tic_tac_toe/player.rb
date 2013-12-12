@@ -3,13 +3,13 @@ module TicTacToe
 
     attr_accessor :name, :symbol
 
-    def initialize(name, isComputer)
+    def initialize(name, is_computer)
       @name = name
-      @isComputer = isComputer
+      @is_computer = is_computer
     end
 
     def select_position(posible_positions)
-      @isComputer ? select_random_position(posible_positions) : receive_player_input
+      @is_computer ? select_random_position(posible_positions) : receive_player_input
     end
 
     def select_random_position(posible_positions)

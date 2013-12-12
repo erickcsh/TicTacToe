@@ -45,7 +45,7 @@ module TicTacToe
 
   	def is_valid_input?(input)
   		return true if is_quit_reset_option?(input)
-  		if(GridPosition.is_valid_position_string(input))
+  		if(GridPosition.valid_position_string?(input))
   			is_empty_position?(input)
   			else
   			puts "Not a valid selection, select another one"
