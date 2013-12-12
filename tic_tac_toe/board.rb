@@ -26,7 +26,7 @@ module TicTacToe
   		@board[position.row][position.col] == EMPTY
   	end
 	
-  	def get_empty_postions
+  	def get_empty_positions
   		@board.each_with_index.reduce([]) { |positions, row_with_index| positions << get_col_empty_positions(row_with_index.first, row_with_index.last) }.flatten!
   	end
 	

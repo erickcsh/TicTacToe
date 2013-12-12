@@ -36,8 +36,8 @@ module TicTacToe
 	
   	def win_horizontal_line?(player_number, row)
   	  cols = [0, 1, 2]
-  	  cols.all? do |row_index|
-  	    @board[row][cols] == player_number
+  	  cols.all? do |col_index|
+  	    @board[row][col_index] == player_number
 	    end
   	end
 	
@@ -55,10 +55,6 @@ module TicTacToe
   		@board[0][2] == player_number &&
   		@board[1][1] == player_number &&
   		@board[2][0] == player_number
-  	end
-  	
-  	def 
-  	  @board[row][col] == player_number
   	end
   	
   end

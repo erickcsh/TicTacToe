@@ -10,8 +10,8 @@ module TicTacToe
     	@players = players
     	@turn = rand(2)
     	@game_finished = false
-    	@quit = false
     	@display = Display.new
+    	@checker = Checker.new(@board.rows)
     	set_players_symbols
     end
 
@@ -38,7 +38,7 @@ module TicTacToe
 
   	def get_player_valid_input
   		begin
-  			input = @players[@turn].select_position(@board.get_empty_postions)
+  			input = @players[@turn].select_position(@board.get_empty_positions)
   		end while !is_valid_input?(input)
   		input
   	end
@@ -81,8 +81,7 @@ module TicTacToe
   	end
 
   	def quit
-  		@game_finished = true
-  		@quit = true
+  		@game_finished = true  	
   	end
 
   	def reset
@@ -98,8 +97,8 @@ module TicTacToe
 
   	def check_for_ending_move
   		@display.print_board(@board)
-  		return win if @board.win?(@players[@turn].symbol)
-  		draw if @board.draw?
+  		return win if @checker.win?(@players[@turn].symbol)
+  		draw if @checker.draw?
   	end
 
   	def draw
