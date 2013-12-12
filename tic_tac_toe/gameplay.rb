@@ -21,7 +21,7 @@ module TicTacToe
     end
 
     def play
-  	    while !game_finished? do
+  	  while !game_finished? do
     		player_turn
     	end
   	end
