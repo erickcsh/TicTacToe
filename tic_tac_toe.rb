@@ -1,12 +1,12 @@
 module TicTacToe
 end
 
-require_relative 'board'
-require_relative 'display'
-require_relative 'start'
-require_relative 'gameplay'
-require_relative 'grid_position'
-require_relative 'instructions'
-require_relative 'player'
+require_relative 'tic_tac_toe/board'
+require_relative 'tic_tac_toe/display'
+require_relative 'tic_tac_toe/start'
+require_relative 'tic_tac_toe/gameplay'
+require_relative 'tic_tac_toe/grid_position'
+require_relative 'tic_tac_toe/instructions'
+require_relative 'tic_tac_toe/player'
 
 TicTacToe::Start.new.start

@@ -1,7 +1,6 @@
 module TicTacToe
   class Board
 		
-  	DICTIONARY_NUMBER_SYMBOL = {0 => " ", 1 => "X", 2 => "O"}
   	DICTIONARY_INDEX_LETTER = {0 => 'A', 1 => 'B', 2 => 'C'}
   	EMPTY = 0
 	
