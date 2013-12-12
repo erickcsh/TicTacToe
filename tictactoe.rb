@@ -1,8 +1,12 @@
-require_relative 'Board'
-require_relative 'Start'
-require_relative 'Gameplay'
-require_relative 'GridPosition'
-require_relative 'Instructions'
-require_relative 'Player'
+module TicTacToe
+end
 
-Start.new.start
+require_relative 'board'
+require_relative 'display'
+require_relative 'start'
+require_relative 'gameplay'
+require_relative 'grid_position'
+require_relative 'instructions'
+require_relative 'player'
+
+TicTacToe::Start.new.start
