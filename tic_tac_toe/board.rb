@@ -8,15 +8,15 @@ module TicTacToe
   		create_board
   	end
 	
-	def rows
-	    @board 
-	end
-	  
-	def cols
-	    @board.each_with_index.map do |row, row_index|
-			@board.map { |row| row[row_index] }
-		end
-	end
+    def rows
+        @board 
+    end
+      
+    def cols
+        @board.each_with_index.map do |row, row_index|
+        @board.map { |row| row[row_index] }
+      end
+    end
 		
   	def fill_board_space(position, player_number)
   		position = GridPosition.new(position)
@@ -32,12 +32,12 @@ module TicTacToe
   		@board.each_with_index.reduce([]) { |positions, row_with_index| positions << get_col_empty_positions(row_with_index.first, row_with_index.last) }.flatten!
   	end
 	
-	private
+    private
   	def create_board
   		@board = [[EMPTY,EMPTY,EMPTY],[EMPTY,EMPTY,EMPTY],[EMPTY,EMPTY,EMPTY]]
   	end
 	
-	private
+    private
   	def get_col_empty_positions(row, index)
   		letter = index_to_letter(index)
   		row.each_with_index.reduce([]) do |positions, element_with_index|  
@@ -46,7 +46,7 @@ module TicTacToe
   		end
   	end
 	
-	private
+    private
   	def index_to_letter(index)
   		DICTIONARY_INDEX_LETTER[index]
   	end

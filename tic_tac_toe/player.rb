@@ -12,25 +12,21 @@ module TicTacToe
       @is_computer ? select_random_position(posible_positions) : receive_player_input
     end
 
-	private
+    private
     def select_random_position(posible_positions)
       index = rand(posible_positions.size)
       make_computer_think
       posible_positions[index]
     end
 
-	private
+    private
     def make_computer_think
-      print "Thinking."
-	  2.times do
-		sleep(1)
-		print "."
-	  end
+      Display.display_msg_computer_thinking
     end
 
-	private
+    private
     def receive_player_input
-      puts "Select the position"
+      Display.display_msg_select_position
       position = STDIN.gets.chomp
     end
 

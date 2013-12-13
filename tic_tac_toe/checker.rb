@@ -15,14 +15,14 @@ module TicTacToe
   		vertical_win?(player_number) || horizontal_win?(player_number) || diagonal_win?(player_number)
   	end
 	
-	private
-  	def vertical_win?(player_number)
+    private
+    def vertical_win?(player_number)
   		win = false
   		3.times { |count| win = true if win_vertical_line?(player_number, count) }
   		win
   	end
 	
-	private
+    private
   	def win_vertical_line?(player_number, col)
   	  rows = [0, 1, 2]
   	  rows.all? do |row_index|
@@ -30,14 +30,14 @@ module TicTacToe
 	    end
   	end
 	
-	private
+    private
   	def horizontal_win?(player_number)
   		win = false
   		3.times { |count| win = true if win_horizontal_line?(player_number,count)}
   		win
   	end
 	
-	private
+    private
   	def win_horizontal_line?(player_number, row)
   	  cols = [0, 1, 2]
   	  cols.all? do |col_index|
@@ -45,19 +45,19 @@ module TicTacToe
 	    end
   	end
 	
-	private
+    private
   	def diagonal_win?(player_number)
   		left_to_right_diagonal_win?(player_number) || right_to_left_diagonal_win?(player_number)
   	end
 	
-	private
+    private
   	def left_to_right_diagonal_win?(player_number)
   		@board[0][0] == player_number &&
   		@board[1][1] == player_number &&
   		@board[2][2] == player_number
   	end
 	
-	private
+    private
   	def right_to_left_diagonal_win?(player_number)
   		@board[0][2] == player_number &&
   		@board[1][1] == player_number &&
