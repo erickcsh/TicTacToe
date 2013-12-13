@@ -110,20 +110,7 @@ module TicTacToe
     private
   	def check_for_ending_move
   		@display.print_board(@board)
-  		return win if @checker.win?(@players[@turn].symbol)
-  		draw if @checker.draw?
-  	end
-
-    private
-  	def draw
-  		@display.display_msg_draw
-      @game_finished = true
-  	end
-
-    private
-  	def win
-  		@display.display_msg_win(@players[@turn].name)
-  		@game_finished = true
+      @game_finished = @checker.ending_move?(@players[@turn])
   	end
 
     private

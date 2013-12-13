@@ -21,14 +21,6 @@ module TicTacToe
       puts "Not an empty position select another one"
     end
     
-    def display_msg_win(player_name)
-      puts "#{player_name} won"
-    end
-    
-    def display_msg_draw
-      puts "Game drawn"
-    end
-    
     def display_turn_status(board, player_name)
       print_board(board)
       puts "\n\n #{player_name} turn"
@@ -50,6 +42,14 @@ module TicTacToe
     
     def display_msg_ask_for_player_name(player_number)
       puts "Enter player #{player_number + 1} name"
+    end
+
+    def self.display_msg_win(player_name)
+      puts "#{player_name} won"
+    end
+    
+    def self.display_msg_draw
+      puts "Game drawn"
     end
     
     def self.display_msg_computer_thinking

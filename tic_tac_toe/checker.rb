@@ -14,7 +14,24 @@ module TicTacToe
   	def win? (player_number)
   		vertical_win?(player_number) || horizontal_win?(player_number) || diagonal_win?(player_number)
   	end
-	
+
+    def ending_move?(player)
+    	return win(player.name) if win?(player.symbol)
+  		draw if draw?
+    end
+
+    private
+  	def draw
+  		Display.display_msg_draw
+      true
+  	end
+
+    private
+  	def win(player_name)
+  		Display.display_msg_win(player_name)
+  		true
+  	end
+
     private
     def vertical_win?(player_number)
   		win = false
