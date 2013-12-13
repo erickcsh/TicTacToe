@@ -1,2 +1,0 @@
-class TestBoard
-end
