@@ -18,7 +18,8 @@ module TicTacToe
     	@turn = rand(2)
     	@game_finished = false
     	@display = Display.new
-    	@checker = Checker.new(@board.rows)
+    	@checker = Checker.new()
+      @board.add_observer(@checker)
     	set_players_symbols
     end
 
@@ -102,7 +103,7 @@ module TicTacToe
 
     private
   	def completed_player_move(input)
-  		@board.fill_board_space(input,@players[@turn].symbol)
+  		@board.fill_board_space(input,@players[@turn])
   		check_for_ending_move
   		change_turn
   	end

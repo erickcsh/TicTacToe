@@ -1,26 +1,30 @@
 module TicTacToe
   class Board
+    include TicTacToe::Observer
+  
 		
   	DICTIONARY_INDEX_LETTER = {0 => 'A', 1 => 'B', 2 => 'C'}
   	EMPTY = 0
 	
   	def initialize
   		create_board
+      super()
   	end
 	
     def rows
         @board 
     end
-      
     def cols
+      
         @board.each_with_index.map do |row, row_index|
         @board.map { |row| row[row_index] }
       end
     end
 		
-  	def fill_board_space(position, player_number)
+  	def fill_board_space(position, player)
   		position = GridPosition.new(position)
-  		@board[position.row][position.col] = player_number
+  		@board[position.row][position.col] = player.symbol
+      notify_observers(player)
   	end
 	
   	def is_position_empty?(position)
@@ -50,6 +54,5 @@ module TicTacToe
   	def index_to_letter(index)
   		DICTIONARY_INDEX_LETTER[index]
   	end
-	
   end
 end

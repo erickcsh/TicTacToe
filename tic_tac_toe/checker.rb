@@ -1,8 +1,9 @@
 module TicTacToe
   class Checker
     
-    def initialize(board)
-      @board = board
+    def initialize
+      @win = false
+      @draw = false
     end
     
     def draw?
@@ -16,8 +17,14 @@ module TicTacToe
   	end
 
     def ending_move?(player)
-    	return win(player.name) if win?(player.symbol)
-  		draw if draw?
+    	return win(player.name) if @win
+      @draw ? draw : false
+    end
+
+    def update(board, player)
+      @board = board.rows
+      (@win = win(player.name)) if win?(player.symbol)
+  		(@draw = draw) if draw?
     end
 
     private
