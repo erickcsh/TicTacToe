@@ -1,6 +1,9 @@
 module TicTacToe  
   class Start
 
+    ONE_PLAYER_MODE = 1
+    TWO_PLAYER_MODE = 2
+
     def initialize
       @players_number = 1
       @players = []
@@ -23,57 +26,48 @@ module TicTacToe
       end
     end
 
-    private
     def ask_for_replay
       @display.display_msg_replay
-      replay = STDIN.gets.chomp
+      replay = Display.read_line
       wants_to_replay?(replay)
     end
 
-    private
     def wants_to_replay?(replay)
       replay.downcase.eql?('y')
     end
 
-    private
     def ask_for_mode
       @display.display_modes_options
       enter_mode
     end
 
-    private
     def enter_mode
-      mode = STDIN.gets.chomp
-      while !mode_is_valid? (mode.to_i)
+      mode = Display.read_line
+      while !mode_is_valid?(mode.to_i)
         @display.display_error_msg_mode
-        mode = STDIN.gets.chomp
+        mode = Display.read_line
       end
       assign_player_mode(mode.to_i)
     end
 
-    private
     def mode_is_valid?(mode)
-      mode == 1 || mode == 2
+      [ONE_PLAYER_MODE,TWO_PLAYER_MODE].include?(mode)
     end
 
-    private
     def assign_player_mode(mode)
       @players_number = mode
     end
 
-	private
     def enter_players_name
-      @players_number.times { |count| @players[count] = Player.new(ask_for_name(count), false) }
-      @players[1] = Player.new("Computer", true) if @players_number == 1
+      @players_number.times { |count| @players[count] = Player.new(ask_for_name(count), :computer => false) }
+      @players[1] = Player.new("Computer", :computer => true) if @players_number == 1
     end
 
-    private
     def ask_for_name(player_number)
       @display.display_msg_ask_for_player_name(player_number)
-      STDIN.gets.chomp
+      Display.read_line
     end
 
-    private
     def start_game
       @display.clear_console
       Gameplay.new(@players).play

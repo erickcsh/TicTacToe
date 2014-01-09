@@ -3,9 +3,9 @@ module TicTacToe
 
     attr_accessor :name, :symbol
 
-    def initialize(name, is_computer)
+    def initialize(name, options)
       @name = name
-      @is_computer = is_computer
+      @is_computer = options[:computer]
     end
 
     def select_position(posible_positions)
@@ -19,15 +19,13 @@ module TicTacToe
       posible_positions[index]
     end
 
-    private
     def make_computer_think
       Display.display_msg_computer_thinking
     end
 
-    private
     def receive_player_input
       Display.display_msg_select_position
-      position = STDIN.gets.chomp
+      Display.read_line
     end
 
   end
