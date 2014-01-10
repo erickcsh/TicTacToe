@@ -1,8 +1,6 @@
 module TicTacToe
   class Display
 
-    DICTIONARY_NUMBER_SYMBOL = {Board::EMPTY => " ", 1 => "X", 2 => "O"}
-
     def print_board(board)
       clear_console
       puts "\t   A     B     C"
@@ -71,16 +69,12 @@ module TicTacToe
     private
     def print_row(row, row_index)
       print "\t#{row_index + 1}"
-      row.each_with_index do |position, index| 
-        print "  #{number_to_symbol(position)}  " 
+      row.each_with_index do |cell, index| 
+        print "  #{cell.content}  " 
         separator = (index == row.size - 1)  ? "\n" : "|"
-        print separator      
+        print separator
       end
       puts "\t -----------------" unless row_index == 2
-    end
-
-    def number_to_symbol(number)
-      DICTIONARY_NUMBER_SYMBOL[number]
     end
 
   end

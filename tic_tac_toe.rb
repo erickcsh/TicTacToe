@@ -1,6 +1,4 @@
-module TicTacToe
-end
-
+require_relative 'tic_tac_toe/cell'
 require_relative 'tic_tac_toe/observer'
 require_relative 'tic_tac_toe/board'
 require_relative 'tic_tac_toe/display'

@@ -6,9 +6,11 @@ module TicTacToe
     end
 
     def play
-      while !game_finished? do
-        player_turn
-      end
+      player_turn while !@game_finished
+    end
+
+    def finish_game
+      quit
     end
 
     private
@@ -18,45 +20,41 @@ module TicTacToe
       @turn = rand(2)
       @game_finished = false
       @display = Display.new
-      @checker = Checker.new()
+      @checker = Checker.new(self)
       @board.add_observer(@checker)
       set_players_symbols
     end
 
     def set_players_symbols
-      @players[@turn].symbol = 1
-      @players[(@turn + 1) % 2].symbol = 2
-    end
-
-    def game_finished?
-      @game_finished
+      @players[@turn].symbol = "X" 
+      @players[(@turn + 1) % 2].symbol = "O"
     end
 
     def player_turn
       @display.display_turn_status(@board, @players[@turn].name)
-      input = get_player_valid_input
+      input = read_player_valid_input
       check_input(input)
     end
 
-    def get_player_valid_input
+    def read_player_valid_input
       begin
         input = @players[@turn].select_position(@board.get_empty_positions)
-      end while !is_valid_input?(input)
+      end while !valid_input?(input)
       input
     end
 
-    def is_valid_input?(input)
-      return true if is_quit_reset_option?(input)
+    def valid_input?(input)
+      return true if quit_reset_option?(input)
       if(GridPosition.valid_position_string?(input))
-        is_empty_position?(input)
+        empty_position?(input)
       else
         @display.display_msg_not_valid_input
         false
       end
     end
 
-    def is_empty_position?(input)
-      if(@board.is_position_empty?(input))
+    def empty_position?(input)
+      if(@board.position_empty?(input))
         true
       else
         @display.display_msg_not_empty_position
@@ -65,12 +63,12 @@ module TicTacToe
     end
 
     def check_input(input)
-      is_quit_reset_option?(input) ? quit_reset_option_action(input) : completed_player_move(input)
+      quit_reset_option?(input) ? quit_reset_option_action(input) : completed_player_move(input)
     end
 
-    def is_quit_reset_option?(option)
+    def quit_reset_option?(option)
       option = option.downcase
-      option.eql?("help") || option.eql?("quit") || option.eql?("reset")
+      ['help','quit','reset'].include?(option)
     end
 
     def quit_reset_option_action(option)
@@ -92,13 +90,9 @@ module TicTacToe
 
     def completed_player_move(input)
       @board.fill_board_space(input,@players[@turn])
-      check_for_ending_move
-      change_turn
-    end
-
-    def check_for_ending_move
       @display.print_board(@board)
-      @game_finished = @checker.ending_move?(@players[@turn])
+      @checker.result_message(@players[@turn])
+      change_turn unless @game_finished
     end
 
     def change_turn

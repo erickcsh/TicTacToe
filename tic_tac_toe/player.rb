@@ -16,7 +16,7 @@ module TicTacToe
     def select_random_position(posible_positions)
       index = rand(posible_positions.size)
       make_computer_think
-      posible_positions[index]
+      posible_positions[index].position
     end
 
     def make_computer_think
