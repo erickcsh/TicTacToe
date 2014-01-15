@@ -1,6 +1,8 @@
+require 'observer'
+
 module TicTacToe
   class Board
-    include TicTacToe::Observer
+    include Observable
 
     def initialize
       create_board
@@ -14,7 +16,8 @@ module TicTacToe
     def fill_board_space(position, player)
       position = GridPosition.from_string(position)
       @board[position.row][position.col].owner = player
-      notify_observers(player)
+      changed
+      notify_observers({:board => self, :player => player})
     end
 
     def position_empty?(position)

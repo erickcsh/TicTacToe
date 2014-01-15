@@ -1,6 +1,10 @@
 module TicTacToe  
   class Gameplay
 
+    VALID_INPUT = 0
+    NOT_VALID_INPUT = 1
+    NOT_EMPTY_INPUT_POSITION = 2
+
     def initialize(players)
       prepare_initial_conditions(players)
     end
@@ -39,27 +43,33 @@ module TicTacToe
     def read_player_valid_input
       begin
         input = @players[@turn].select_position(@board.get_empty_positions)
-      end while !valid_input?(input)
+        validated_input = input_validation(input)
+        input_error_message(validated_input)
+      end while !valid_input?(validated_input)
       input
     end
 
-    def valid_input?(input)
-      return true if quit_reset_option?(input)
+    def input_validation(input)
+      return VALID_INPUT if quit_reset_option?(input)
       if(GridPosition.valid_position_string?(input))
-        empty_position?(input)
+        @board.position_empty?(input) ? VALID_INPUT : NOT_EMPTY_INPUT_POSITION
       else
-        @display.display_msg_not_valid_input
-        false
+        NOT_VALID_INPUT
       end
+
     end
 
-    def empty_position?(input)
-      if(@board.position_empty?(input))
-        true
-      else
-        @display.display_msg_not_empty_position
-        false
-      end
+    def valid_input?(validated_input)
+      validated_input == VALID_INPUT
+    end
+
+    def input_error_message(validated_input)
+     case validated_input
+     when NOT_VALID_INPUT
+       @display.display_msg_not_valid_input
+     when NOT_EMPTY_INPUT_POSITION
+       @display.display_msg_not_empty_position
+     end 
     end
 
     def check_input(input)
@@ -73,10 +83,13 @@ module TicTacToe
 
     def quit_reset_option_action(option)
       option = option.downcase
-      if(option.eql?("help"))
+      case option
+      when 'help'
         Instructions.display_gameplay_instructions
-      else
-        option.eql?("quit") ? quit : reset
+      when 'quit'
+        quit
+      when 'reset'
+        reset
       end
     end
 

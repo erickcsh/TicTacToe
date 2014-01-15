@@ -8,13 +8,14 @@ module TicTacToe
     end
 
     def result_message(player)
-      Display.display_msg_draw if @draw
-      Display.display_msg_win(player.name) if @win
+      display = Display.new
+      display.display_msg_draw if @draw
+      display.display_msg_win(player.name) if @win
     end
 
-    def update(board, player)
-      @board = board.rows
-      @win = win?(player)
+    def update(*args)
+      @board = args[0][:board].rows
+      @win = win?(args[0][:player])
   		@draw = draw? unless @win
       @gameplay.finish_game if (@win || @draw)
     end
