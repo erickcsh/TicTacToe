@@ -1,10 +1,8 @@
+require 'observer'
+
 module TicTacToe
   class Board
-    include TicTacToe::Observer
-
-
-    DICTIONARY_INDEX_LETTER = {0 => 'A', 1 => 'B', 2 => 'C'}
-    EMPTY = 0
+    include Observable
 
     def initialize
       create_board
@@ -16,37 +14,35 @@ module TicTacToe
     end
 
     def fill_board_space(position, player)
-      position = GridPosition.new(position)
-      @board[position.row][position.col] = player.symbol
-      notify_observers(player)
+      position = GridPosition.from_string(position)
+      @board[position.row][position.col].owner = player
+      changed
+      notify_observers({:board => self, :player => player})
     end
 
-    def is_position_empty?(position)
-      position = GridPosition.new(position)
-      @board[position.row][position.col] == EMPTY
+    def position_empty?(position)
+      position = GridPosition.from_string(position)
+      @board[position.row][position.col].empty?
     end
 
     def get_empty_positions
-      @board.each_with_index.reduce([]) do |positions, row_with_index|
-        positions << get_col_empty_positions(row_with_index.first, row_with_index.last)
+      @board.each.reduce([]) do |positions, row|
+        positions << row.select { |cell| cell.empty? }
       end.flatten!
     end
 
     private
     def create_board
-      @board = [[EMPTY,EMPTY,EMPTY],[EMPTY,EMPTY,EMPTY],[EMPTY,EMPTY,EMPTY]]
+      @board = generate_board
     end
 
-    def get_col_empty_positions(row, index)
-      letter = index_to_letter(index)
-      row.each_with_index.reduce([]) do |positions, element_with_index|  
-        letter = index_to_letter(element_with_index.last)
-        element_with_index.first == EMPTY ?  positions << "#{letter},#{index + 1}" : positions
+    def generate_board
+      [1,2,3].each.reduce([]) do |board, number| 
+        board << ['A','B','C'].each.reduce([]) do |row, letter|
+          row << Cell.new("#{letter},#{number}")
+        end
       end
     end
 
-    def index_to_letter(index)
-      DICTIONARY_INDEX_LETTER[index]
-    end
   end
 end

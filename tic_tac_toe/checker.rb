@@ -1,84 +1,71 @@
 module TicTacToe
   class Checker
-    
-    def initialize
+
+    def initialize(gameplay)
       @win = false
       @draw = false
-    end
-    
-    def draw?
-  		draw = true
-  		@board.each {|row| row.each { |element| draw = false if element == Board::EMPTY}}
-  		draw
-  	end
-	
-  	def win? (player_number)
-  		vertical_win?(player_number) || horizontal_win?(player_number) || diagonal_win?(player_number)
-  	end
-
-    def ending_move?(player)
-    	return win(player.name) if @win
-      @draw ? draw : false
+      @gameplay = gameplay
     end
 
-    def update(board, player)
-      @board = board.rows
-      (@win = win(player.name)) if win?(player.symbol)
-  		(@draw = draw) if draw?
+    def result_message(player)
+      display = Display.new
+      display.display_msg_draw if @draw
+      display.display_msg_win(player.name) if @win
+    end
+
+    def update(*args)
+      @board = args[0][:board].rows
+      @win = win?(args[0][:player])
+  		@draw = draw? unless @win
+      @gameplay.finish_game if (@win || @draw)
     end
 
     private
-  	def draw
-  		Display.display_msg_draw
-      true
-  	end
-
-  	def win(player_name)
-  		Display.display_msg_win(player_name)
-  		true
-  	end
-
-    def vertical_win?(player_number)
-  		win = false
-  		3.times { |count| win = true if win_vertical_line?(player_number, count) }
-  		win
+    def draw?
+  		@board.all? {|row| row.all? { |element| !element.empty? }}
   	end
 	
-  	def win_vertical_line?(player_number, col)
+  	def win? (player)
+  		vertical_win?(player) || horizontal_win?(player) || diagonal_win?(player)
+  	end
+
+    def vertical_win?(player)
+  		3.times.any? { |count| win_vertical_line?(player, count) }
+  	end
+	
+  	def win_vertical_line?(player, col)
   	  rows = [0, 1, 2]
   	  rows.all? do |row_index|
-  	    @board[row_index][col] == player_number
+  	    @board[row_index][col].owner?(player)
 	    end
   	end
 	
-  	def horizontal_win?(player_number)
-  		win = false
-  		3.times { |count| win = true if win_horizontal_line?(player_number,count)}
-  		win
+  	def horizontal_win?(player)
+  		3.times.any? { |count| win_horizontal_line?(player,count)}
   	end
 	
-  	def win_horizontal_line?(player_number, row)
+  	def win_horizontal_line?(player, row)
   	  cols = [0, 1, 2]
   	  cols.all? do |col_index|
-  	    @board[row][col_index] == player_number
+  	    @board[row][col_index].owner?(player)
 	    end
   	end
 	
-  	def diagonal_win?(player_number)
-  		left_to_right_diagonal_win?(player_number) || right_to_left_diagonal_win?(player_number)
+  	def diagonal_win?(player)
+  		left_to_right_diagonal_win?(player) || right_to_left_diagonal_win?(player)
   	end
 	
-  	def left_to_right_diagonal_win?(player_number)
-  		@board[0][0] == player_number &&
-  		@board[1][1] == player_number &&
-  		@board[2][2] == player_number
+  	def left_to_right_diagonal_win?(player)
+  		@board[0][0].owner?(player) &&
+  		@board[1][1].owner?(player) &&
+  		@board[2][2].owner?(player)
   	end
 	
-  	def right_to_left_diagonal_win?(player_number)
-  		@board[0][2] == player_number &&
-  		@board[1][1] == player_number &&
-  		@board[2][0] == player_number
+  	def right_to_left_diagonal_win?(player)
+  		@board[0][2].owner?(player) &&
+  		@board[1][1].owner?(player) &&
+  		@board[2][0].owner?(player)
   	end
-  	
+
   end
 end

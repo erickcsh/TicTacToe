@@ -43,14 +43,14 @@ module TicTacToe
 
     def enter_mode
       mode = Display.read_line
-      while !mode_is_valid?(mode.to_i)
+      while !valid_mode?(mode.to_i)
         @display.display_error_msg_mode
         mode = Display.read_line
       end
       assign_player_mode(mode.to_i)
     end
 
-    def mode_is_valid?(mode)
+    def valid_mode?(mode)
       [ONE_PLAYER_MODE,TWO_PLAYER_MODE].include?(mode)
     end
 

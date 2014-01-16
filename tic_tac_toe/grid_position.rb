@@ -5,19 +5,20 @@ module TicTacToe
 
     attr_accessor :row, :col
 
-    def initialize(row, col)
-      @row = row
-      @col = col
+    def initialize(specs)
+      @row = specs[:row]
+      @col = specs[:col]
     end
 
-    def initialize(string_position)
-      get_position_from_string(string_position)
+    def self.from_string(string_position)
+      position_from_string(string_position)
     end
 
-    def get_position_from_string(string_position)
+    def self.position_from_string(string_position)
       col, row = string_position.split(',')
-      @row = row.to_i - 1
-      @col = DICTIONARY_LETTER_NUMBER_TRANSFORMATION[col]
+      row = row.to_i - 1
+      col = DICTIONARY_LETTER_NUMBER_TRANSFORMATION[col]
+      GridPosition.new({:row => row, :col => col})
     end
 
     def self.valid_position_string?(selection)

@@ -6,6 +6,7 @@ module TicTacToe
     def initialize(name, options)
       @name = name
       @is_computer = options[:computer]
+      @display = Display.new
     end
 
     def select_position(posible_positions)
@@ -16,15 +17,15 @@ module TicTacToe
     def select_random_position(posible_positions)
       index = rand(posible_positions.size)
       make_computer_think
-      posible_positions[index]
+      posible_positions[index].position
     end
 
     def make_computer_think
-      Display.display_msg_computer_thinking
+      @display.display_msg_computer_thinking
     end
 
     def receive_player_input
-      Display.display_msg_select_position
+      @display.display_msg_select_position
       Display.read_line
     end
 

@@ -1,0 +1,10 @@
+msg_not_valid_input : "Not a valid selection, select another one"
+msg_not_empty_position : "Not an empty position select another one"
+msg_replay : "Do you want to play again [Y/N]"
+modes_options : "Select a mode:
+                     \n\t1) 1 player
+                     \n\t2) 2 players"
+error_msg_mode : "Enter a valid mode"
+msg_select_position : "Select the position"
+msg_draw : "Game drawn"
+
