@@ -1,6 +1,8 @@
 module TicTacToe
   class Cell
 
+    EMPTY_SYMBOL = ' '
+
     attr_accessor :owner, :position
 
     def initialize(position, owner = nil)
@@ -17,7 +19,7 @@ module TicTacToe
     end
 
     def content
-      @owner.nil? ? " " : @owner.symbol
+      @owner.nil? ? EMPTY_SYMBOL : @owner.symbol
     end
   end
 end
