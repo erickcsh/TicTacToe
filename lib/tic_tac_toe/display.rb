@@ -5,38 +5,45 @@ module TicTacToe
 
     MESSAGES_FILE = 'res/messages.yaml'
 
+    attr_accessor :output, :input
+
+    def initialize(output = $stdout)
+      @output = output
+    end
+
     def print_board(board)
       clear_console
-      puts "\t   A     B     C"
-      board.rows.each_with_index { |row, index| print_row(row, index) }
+      @output.puts "\t   A     B     C"
+      @output.puts board.rows.map.with_index{ |row, index| row_message(row, index) }.join
     end
 
     def clear_console
-      system "clear"
+      clear = `clear`
+      @output.puts clear
     end
 
     def display(msg_name, *args)
-      puts YAML.load_file(MESSAGES_FILE)[msg_name]
+      @output.puts YAML.load_file(MESSAGES_FILE)[msg_name]
     end
 
     def display_turn_status(board, player_name)
       print_board(board)
-      puts "\n\n #{player_name} turn"
+      @output.puts "\n\n #{player_name} turn"
     end
 
     def display_msg_ask_for_player_name(player_number)
-      puts "Enter player #{player_number + 1} name"
+      @output.puts "Enter player #{player_number + 1} name"
     end
 
     def display_msg_win(player_name)
-      puts "#{player_name} won"
+      @output.puts "#{player_name} won"
     end
 
     def display_msg_computer_thinking
-      print "Thinking."
+      @output.print "Thinking."
       2.times do
         sleep(1)
-        print "."
+        @output.print "."
       end
     end
 
@@ -45,14 +52,15 @@ module TicTacToe
     end
 
     private
-    def print_row(row, row_index)
-      print "\t#{row_index + 1}"
+    def row_message(row, row_index)
+      message = "\t#{row_index + 1}"
       row.each_with_index do |cell, index| 
-        print "  #{cell.content}  " 
+        message << "  #{cell.content}  " 
         separator = (index == row.size - 1)  ? "\n" : "|"
-        print separator
+        message << separator
       end
-      puts "\t -----------------" unless row_index == 2
+      message << "\t -----------------\n" unless row_index == 2
+      message
     end
 
     def method_missing(name, *args)
