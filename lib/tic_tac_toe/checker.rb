@@ -13,9 +13,9 @@ module TicTacToe
       display.display_msg_win(player.name) if @win
     end
 
-    def update(*args)
-      @board = args[0][:board].rows
-      @win = win?(args[0][:player])
+    def update(args)
+      @board = args[:board].rows
+      @win = win?(args[:player])
   		@draw = draw? unless @win
       @gameplay.finish_game if (@win || @draw)
     end
@@ -23,7 +23,7 @@ module TicTacToe
     private
     def draw?
   		@board.all? {|row| row.all? { |element| !element.empty? }}
-  	end
+    end
 	
   	def win? (player)
   		vertical_win?(player) || horizontal_win?(player) || diagonal_win?(player)
@@ -31,7 +31,7 @@ module TicTacToe
 
     def vertical_win?(player)
   		3.times.any? { |count| win_vertical_line?(player, count) }
-  	end
+    end
 	
   	def win_vertical_line?(player, col)
   	  rows = [0, 1, 2]

@@ -3,25 +3,23 @@ module TicTacToe
 
     attr_accessor :name, :symbol
 
-    def initialize(name, options)
+    def initialize(name, options = { computer: false })
       @name = name
       @is_computer = options[:computer]
       @display = Display.new
     end
 
     def select_position(posible_positions)
-      @is_computer ? select_random_position(posible_positions) : receive_player_input
+      if(@is_computer) then select_random_position(posible_positions) 
+      else  receive_player_input
+      end
     end
 
     private
     def select_random_position(posible_positions)
       index = rand(posible_positions.size)
-      make_computer_think
-      posible_positions[index].position
-    end
-
-    def make_computer_think
       @display.display_msg_computer_thinking
+      posible_positions[index].position
     end
 
     def receive_player_input

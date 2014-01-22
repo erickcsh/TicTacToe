@@ -51,7 +51,22 @@ module TicTacToe
       STDIN.gets.chomp
     end
 
+    def respond_to?(method, include_private = false)
+      super || respond_to_display?(method)
+    end
+
     private
+    def respond_to_display?(method)
+      name = method.to_s
+      return false unless name =~ /^display_/
+      name.gsub!(/^display_/,'')
+      msg_in_yml_file?(name)
+    end
+
+    def msg_in_yml_file?(msg)
+      YAML.load_file(MESSAGES_FILE).has_key?(msg)
+    end
+
     def row_message(row, row_index)
       message = "\t#{row_index + 1}"
       row.each_with_index do |cell, index| 

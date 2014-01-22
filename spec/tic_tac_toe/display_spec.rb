@@ -1,17 +1,6 @@
 require 'tic_tac_toe/display'
 require 'constants'
 
-A_PLAYER_NAME = 'PLAYER'
-A_PLAYER_NUMBER = 1
-AN_OUTPUT = 1
-AN_INPUT = 2
-CELL_CONTENT = 1
-BOARD_MESSAGE = "\t1  #{CELL_CONTENT}  |  #{CELL_CONTENT}  \n" +
-                "\t -----------------\n" +
-                "\t2  #{CELL_CONTENT}  |  #{CELL_CONTENT}  \n" +
-                "\t -----------------\n" +
-                "\t3  #{CELL_CONTENT}  |  #{CELL_CONTENT}  \n"
-
 describe TicTacToe::Display, ".initialize" do
   context "when it is initialized with an output" do
     subject { described_class.new(AN_OUTPUT) }
@@ -102,10 +91,41 @@ describe TicTacToe::Display, "#display_msg_computer_thinking" do
 end
 
 describe TicTacToe::Display, ".read_line" do
-  subject { described_class.read_line }
 
   it "reads the input and chops the \\n" do
-    allow(STDIN).to receive(gets).and_return(AN_INPUT + "\n")
-    should == AN_INPUT
+    allow(STDIN).to receive(:gets).and_return(AN_INPUT + "\n")
+    expect(described_class.read_line).to eq(AN_INPUT)
   end
+end
+
+describe TicTacToe::Display, "#display_msg_not_valid_input" do
+  it { expect(subject).to respond_to(:display_msg_not_valid_input) }
+end
+
+describe TicTacToe::Display, "#display_msg_not_empty_position" do
+  it { expect(subject).to respond_to(:display_msg_not_empty_position) }
+end
+
+describe TicTacToe::Display, "#display_msg_replay" do
+  it { expect(subject).to respond_to(:display_msg_replay) }
+end
+
+describe TicTacToe::Display, "#display_modes_options" do
+  it { expect(subject).to respond_to(:display_modes_options) }
+end
+
+describe TicTacToe::Display, "#display_error_msg_mode" do
+  it { expect(subject).to respond_to(:display_error_msg_mode) }
+end
+
+describe TicTacToe::Display, "#display_msg_select_position" do
+  it { expect(subject).to respond_to(:display_msg_select_position) }
+end
+
+describe TicTacToe::Display, "#display_msg_draw" do
+  it { expect(subject).to respond_to(:display_msg_draw) }
+end
+
+describe TicTacToe::Display, "#display_msg_does_not_exist" do
+  it { expect(subject).not_to respond_to(:display_msg_does_not_exist) }
 end
