@@ -21,7 +21,7 @@ module TicTacToe
     def prepare_initial_conditions(players)
       @board = Board.new
       @players = players
-      @turn = rand(2)
+      @turn = Kernel.rand(2)
       @game_finished = false
       @display = Display.new
       @checker = Checker.new(self)
@@ -84,12 +84,9 @@ module TicTacToe
     def quit_reset_option_action(option)
       option = option.downcase
       case option
-      when 'help'
-        Instructions.display_gameplay_instructions
-      when 'quit'
-        quit
-      when 'reset'
-        reset
+      when 'help' then Instructions.display_gameplay_instructions
+      when 'quit' then quit
+      when 'reset' then reset
       end
     end
 
@@ -102,7 +99,7 @@ module TicTacToe
     end
 
     def completed_player_move(input)
-      @board.fill_board_space(input,@players[@turn])
+      @board.fill_board_space(input, @players[@turn])
       @display.print_board(@board)
       @checker.result_message(@players[@turn])
       change_turn unless @game_finished

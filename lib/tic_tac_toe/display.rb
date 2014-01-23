@@ -42,7 +42,7 @@ module TicTacToe
     def display_msg_computer_thinking
       @output.print "Thinking."
       2.times do
-        sleep(1)
+        Kernel.sleep(1)
         @output.print "."
       end
     end

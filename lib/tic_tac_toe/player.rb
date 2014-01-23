@@ -17,7 +17,7 @@ module TicTacToe
 
     private
     def select_random_position(posible_positions)
-      index = rand(posible_positions.size)
+      index = Kernel.rand(posible_positions.size)
       @display.display_msg_computer_thinking
       posible_positions[index].position
     end

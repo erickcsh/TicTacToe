@@ -83,7 +83,7 @@ describe TicTacToe::Display, "#display_msg_computer_thinking" do
   let(:output) { double(:output).as_null_object }
   subject { described_class.new(output) }
 
-  before { allow(Kernel).to receive(:sleep).with(1) }
+  before { allow(Kernel).to receive(:sleep) {} }
 
   it "displays message of computer thinking" do
     expect(output).to receive(:print).with("Thinking.")
