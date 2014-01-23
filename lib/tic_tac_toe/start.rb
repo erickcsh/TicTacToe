@@ -51,7 +51,7 @@ module TicTacToe
     end
 
     def valid_mode?(mode)
-      [ONE_PLAYER_MODE,TWO_PLAYER_MODE].include?(mode)
+      [ONE_PLAYER_MODE, TWO_PLAYER_MODE].include?(mode)
     end
 
     def assign_player_mode(mode)
