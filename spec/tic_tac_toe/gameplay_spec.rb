@@ -88,7 +88,7 @@ describe TicTacToe::Gameplay, "#play" do
             expect(player_1).to receive(:select_position).once
           end
 
-          it "quits" do
+          it "quits the game" do
             expect(display).to receive(:display_turn_status).once
           end
         end
@@ -100,7 +100,7 @@ describe TicTacToe::Gameplay, "#play" do
 
           it_behaves_like "valid input"
 
-          it "resets" do
+          it "resets the game" do
             expect(board).to receive(:add_observer).with(checker).twice
           end
 
@@ -140,13 +140,18 @@ describe TicTacToe::Gameplay, "#play" do
           end
 
           context "when it is an ending move" do
+            before do
+              allow(checker).to receive(:result_message) { subject.finish_game }
+            end
+
+            it "does not changes turn" do
+              expect(subject).not_to receive(:change_turn)
+            end
           end
 
           context "when it is not an ending move" do
-            after {}
-
-            it "does not change turn" do
-              expect(subject).to receive(:change_turn).once
+            it "changes turn" do
+              expect(subject).to receive(:change_turn).once.and_call_original
             end
           end
       end
