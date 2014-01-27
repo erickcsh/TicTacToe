@@ -128,6 +128,26 @@ describe TicTacToe::Display, "#display_msg_draw" do
   it { expect(subject).to respond_to(:display_msg_draw) }
 end
 
+describe TicTacToe::Display, "#display_beginning_instructions" do
+  let(:output) { double(:output).as_null_object }
+  it { expect(subject).to respond_to(:display_beginning_instructions) }
+
+  it "waits to continue" do
+    expect(STDIN).to receive(:gets)
+    described_class.new(output).display_beginning_instructions
+  end
+end
+
+describe TicTacToe::Display, "#display_gameplay_instructions" do
+  let(:output) { double(:output).as_null_object }
+  it { expect(subject).to respond_to(:display_gameplay_instructions) }
+
+  it "waits to continue" do
+    expect(STDIN).to receive(:gets)
+    described_class.new(output).display_gameplay_instructions
+  end
+end
+
 describe TicTacToe::Display, "#display_msg_does_not_exist" do
   it { expect(subject).not_to respond_to(:display_msg_does_not_exist) }
 end

@@ -24,6 +24,7 @@ module TicTacToe
 
     def display(msg_name, *args)
       @output.puts YAML.load_file(MESSAGES_FILE)[msg_name]
+      STDIN.gets if instructions?(msg_name)
     end
 
     def display_turn_status(board, player_name)
@@ -56,6 +57,10 @@ module TicTacToe
     end
 
     private
+    def instructions?(msg_name)
+      msg_name.end_with?('_instructions')
+    end
+
     def respond_to_display?(method)
       name = method.to_s
       return false unless name =~ /^display_/

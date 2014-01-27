@@ -12,7 +12,7 @@ describe TicTacToe::Start, "#start" do
 
   before do
     allow(TicTacToe::Gameplay).to receive(:new) { gameplay }
-    allow(TicTacToe::Instructions).to receive(:display_beginning_instructions) {}
+    allow(display).to receive(:display_beginning_instructions) {}
     allow(TicTacToe::Display).to receive(:new) { display }
     allow(TicTacToe::Display).to receive(:read_line) { '1' }
     allow(TicTacToe::Player).to receive(:new) do |name, args|
@@ -29,7 +29,7 @@ describe TicTacToe::Start, "#start" do
   end
 
   it "displays beggining instructions" do
-    expect(TicTacToe::Instructions).to receive(:display_beginning_instructions) 
+    expect(display).to receive(:display_beginning_instructions) 
   end
 
   context "when game is going to start" do

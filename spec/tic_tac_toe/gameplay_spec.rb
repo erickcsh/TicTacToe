@@ -17,8 +17,7 @@ describe TicTacToe::Gameplay, "#play" do
     allow(TicTacToe::Display).to receive(:new) { display }
     allow(TicTacToe::Checker).to receive(:new) { checker }
     allow(Kernel).to receive(:rand) { 0 }
-    allow(player_1).to receive(:select_position) { 'quit' }
-    allow(player_2).to receive(:select_position) { 'quit' }
+    allow(subject).to receive(:select_position) { 'quit' }
   end
 
   after do
@@ -34,21 +33,49 @@ describe TicTacToe::Gameplay, "#play" do
     expect(player_2.symbol).to eq(PLAYER_2_SYMBOL)
   end
 
-  it "sets observer to the board" do
-    expect(board).to receive(:add_observer).with(checker)
+  context "when asks for a position" do
+    let(:cell) { double(:cell, position:'quit') }
+    before do
+      allow(board).to receive(:get_empty_positions) { [cell, cell, cell] }
+      allow(subject).to receive(:select_position).and_call_original
+    end
+
+    context "when player is a computer" do
+      let(:computer) { TicTacToe::Player.new(A_COMPUTER_NAME, computer: true) }
+      let(:players) { [computer, player_2] }
+
+      it "displays computer thinking message" do
+        expect(display).to receive(:display_msg_computer_thinking)
+      end
+
+      it "selects random position" do
+        expect(subject).to receive(:input_validation).with(cell.position).and_call_original
+      end
+    end
+
+    context "when player is not a computer" do
+      it "displays select position message" do
+        allow(TicTacToe::Display).to receive(:read_line) { 'quit' }
+        expect(display).to receive(:display_msg_select_position)
+      end
+
+      it "reads player's input" do
+        expect(TicTacToe::Display).to receive(:read_line) { 'quit' }
+      end
+    end
   end
 
   context "when player types an input" do
     context "when input is invalid" do
       shared_examples "re-ask position" do
         it "asks for input again" do
-          expect(player_1).to receive(:select_position).twice
+          expect(subject).to receive(:select_position).twice.with(player_1, board)
         end
       end
 
       context "when input is not a valid  position" do
         before do
-          allow(player_1).to receive(:select_position).and_return(INVALID_INPUT_POSITION, 'quit')
+          allow(subject).to receive(:select_position).and_return(INVALID_INPUT_POSITION, 'quit')
         end
 
         it "displays not valid input error message" do
@@ -60,7 +87,7 @@ describe TicTacToe::Gameplay, "#play" do
 
       context "when input is not an empty position" do
         before do
-          allow(player_1).to receive(:select_position).and_return(A_POSITION_STRING, 'quit')
+          allow(subject).to receive(:select_position).and_return(A_POSITION_STRING, 'quit')
           allow(board).to receive(:position_empty?) { false }
         end
 
@@ -85,7 +112,7 @@ describe TicTacToe::Gameplay, "#play" do
           it_behaves_like "valid input"
 
           it "does not ask for input again" do
-            expect(player_1).to receive(:select_position).once
+            expect(subject).to receive(:select_position).once.with(player_1, board)
           end
 
           it "quits the game" do
@@ -95,34 +122,34 @@ describe TicTacToe::Gameplay, "#play" do
 
         context "when input is 'reset'" do
           before do
-            allow(player_1).to receive(:select_position).and_return('reset' , 'quit')
+            allow(subject).to receive(:select_position).and_return('reset' , 'quit')
           end
 
           it_behaves_like "valid input"
 
           it "resets the game" do
-            expect(board).to receive(:add_observer).with(checker).twice
+            expect(board).to receive(:add_observer).with(checker).once
           end
 
         end
 
         context "when input is 'help'" do
           before do
-            allow(player_1).to receive(:select_position).and_return('help', 'quit')
-            allow(TicTacToe::Instructions).to receive(:display_gameplay_instructions)
+            allow(subject).to receive(:select_position).and_return('help', 'quit')
+            allow(display).to receive(:display_gameplay_instructions)
           end
 
           it_behaves_like "valid input"
 
           it "displays Instructions" do
-            expect(TicTacToe::Instructions).to receive(:display_gameplay_instructions)
+            expect(display).to receive(:display_gameplay_instructions)
           end
         end
       end
 
       context "when input is a position" do
           before do
-            allow(player_1).to receive(:select_position).and_return(A_POSITION_STRING)
+            allow(subject).to receive(:select_position).and_return(A_POSITION_STRING, 'quit')
           end
 
           it_behaves_like "valid input"
@@ -135,16 +162,43 @@ describe TicTacToe::Gameplay, "#play" do
             expect(display).to receive(:print_board).with(board)
           end
 
-          it "displays the result message of the action if any" do
-            expect(checker).to receive(:result_message).with(player_1)
+          context "displays the result message of the action if any" do
+            before do
+              allow(checker).to receive(:win) { false }
+              allow(checker).to receive(:draw) { false }
+            end
+
+            context "when there is a win" do
+              it "displays message win" do
+                allow(checker).to receive(:win) { true }
+                expect(display).to receive(:display_msg_win).with(player_1.name)
+              end
+            end
+
+            context "when there is a draw" do
+              it "displays message draw" do
+                allow(checker).to receive(:draw) { true }
+                expect(display).to receive(:display_msg_draw)
+              end
+            end
+
+            context "when there is no win nor draw" do
+              it "does not display draw" do
+                expect(display).not_to receive(:display_msg_draw)
+              end
+
+              it "does not display win message" do
+                expect(display).not_to receive(:display_msg_win).with(player_1.name)
+              end
+            end
           end
 
           context "when it is an ending move" do
             before do
-              allow(checker).to receive(:result_message) { subject.finish_game }
+              allow(subject).to receive(:result_message) { subject.finish_game }
             end
 
-            it "does not changes turn" do
+            it "does not change turn" do
               expect(subject).not_to receive(:change_turn)
             end
           end

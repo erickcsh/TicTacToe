@@ -1,20 +1,16 @@
 module TicTacToe
   class Checker
 
+    attr_reader :win, :draw
+
     def initialize(gameplay)
       @win = false
       @draw = false
       @gameplay = gameplay
     end
 
-    def result_message(player)
-      display = Display.new
-      display.display_msg_draw if @draw
-      display.display_msg_win(player.name) if @win
-    end
-
     def update(args)
-      @board = args[:board].rows
+      @board = args[:board].board
       @win = win?(args[:player])
   		@draw = draw? unless @win
       @gameplay.finish_game if (@win || @draw)

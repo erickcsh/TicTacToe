@@ -19,7 +19,7 @@ module TicTacToe
     end
 
     def content
-      @owner.nil? ? EMPTY_SYMBOL : @owner.symbol
+      empty? ? EMPTY_SYMBOL : @owner.symbol
     end
   end
 end

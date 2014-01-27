@@ -4,13 +4,11 @@ module TicTacToe
   class Board
     include Observable
 
-    def initialize
-      create_board
-      super()
-    end
+    attr_reader :board
 
-    def rows
-      @board 
+    def initialize
+      @board = empty_board
+      super()
     end
 
     def fill_board_space(position, player)
@@ -26,23 +24,16 @@ module TicTacToe
     end
 
     def get_empty_positions
-      @board.each.reduce([]) do |positions, row|
-        positions << row.select { |cell| cell.empty? }
-      end.flatten!
+      @board.each.reduce([]) { |positions, row| positions + row.select(&:empty?) }
     end
 
     private
-    def create_board
-      @board = generate_board
-    end
-
-    def generate_board
+    def empty_board
       [1,2,3].each.reduce([]) do |board, number| 
         board << ['A','B','C'].each.reduce([]) do |row, letter|
           row << Cell.new("#{letter},#{number}")
         end
       end
     end
-
   end
 end

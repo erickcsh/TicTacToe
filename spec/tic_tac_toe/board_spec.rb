@@ -5,8 +5,8 @@ def same_positions?(cells, positions)
     cells.each_with_index.all? { |cell, index| cell.position == positions[index] }
 end
 
-describe TicTacToe::Board, "#rows" do
-  let(:cells) { described_class.new.rows.flatten! }
+describe TicTacToe::Board, "#board" do
+  let(:cells) { described_class.new.board.flatten! }
 
   it "contains the correct cells" do
     expect(same_positions?(cells, ALL_POSITIONS)).to be_true
@@ -22,7 +22,7 @@ describe TicTacToe::Board, "#fill_board_space" do
   
   it "assigns space to a player" do
     subject.fill_board_space(A_POSITION, A_PLAYER)
-    player = subject.rows[position.row][position.col].owner
+    player = subject.board[position.row][position.col].owner
     expect(player).to eq A_PLAYER
   end
 

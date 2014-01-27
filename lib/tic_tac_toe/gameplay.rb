@@ -36,17 +36,25 @@ module TicTacToe
 
     def player_turn
       @display.display_turn_status(@board, @players[@turn].name)
-      input = read_player_valid_input
+      input = read_player_valid_input.downcase
       check_input(input)
     end
 
     def read_player_valid_input
       begin
-        input = @players[@turn].select_position(@board.get_empty_positions)
+        input = select_position(@players[@turn], @board.get_empty_positions)
         validated_input = input_validation(input)
         input_error_message(validated_input)
       end while !valid_input?(validated_input)
       input
+    end
+
+    def select_position(player, posible_positions)
+      if player.computer?
+        select_random_position(posible_positions)
+      else
+        receive_player_input
+      end
     end
 
     def input_validation(input)
@@ -58,6 +66,18 @@ module TicTacToe
       end
 
     end
+
+    def select_random_position(posible_positions)
+      index = Kernel.rand(posible_positions.size)
+      @display.display_msg_computer_thinking
+      posible_positions[index].position
+    end
+
+    def receive_player_input
+      @display.display_msg_select_position
+      Display.read_line
+    end
+
 
     def valid_input?(validated_input)
       validated_input == VALID_INPUT
@@ -77,21 +97,19 @@ module TicTacToe
     end
 
     def quit_reset_option?(option)
-      option = option.downcase
       ['help','quit','reset'].include?(option)
     end
 
     def quit_reset_option_action(option)
-      option = option.downcase
       case option
-      when 'help' then Instructions.display_gameplay_instructions
+      when 'help' then @display.display_gameplay_instructions
       when 'quit' then quit
       when 'reset' then reset
       end
     end
 
     def quit
-      @game_finished = true  	
+      @game_finished = true
     end
 
     def reset
@@ -101,13 +119,17 @@ module TicTacToe
     def completed_player_move(input)
       @board.fill_board_space(input, @players[@turn])
       @display.print_board(@board)
-      @checker.result_message(@players[@turn])
+      result_message(@players[@turn])
       change_turn unless @game_finished
+    end
+
+    def result_message(player)
+      @display.display_msg_draw if @checker.draw
+      @display.display_msg_win(player.name) if @checker.win
     end
 
     def change_turn
       @turn = (@turn + 1) % 2
     end
-
   end
 end

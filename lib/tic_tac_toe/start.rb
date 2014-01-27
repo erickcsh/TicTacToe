@@ -11,7 +11,7 @@ module TicTacToe
     end
 
     def start
-      Instructions.display_beginning_instructions
+      @display.display_beginning_instructions
       ask_for_mode
       enter_players_name
       play_until_no_more_replay
