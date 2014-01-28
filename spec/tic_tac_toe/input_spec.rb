@@ -1,5 +1,6 @@
 require 'tic_tac_toe'
 require 'constants'
+require 'boards'
 
 describe TicTacToe::Input, ".ask_name" do
   let(:display) { double(:display).as_null_object }
@@ -78,6 +79,8 @@ describe TicTacToe::Input, ".ask_player_action" do
   let(:board) { double(:board).as_null_object }
   let(:player_1) { Boards.player_1 }
 
+  subject { described_class }
+
   before do
     allow(TicTacToe::Display).to receive(:read_line).and_return( 'quit')
     TicTacToe::Input.class_variable_set :@@display, display
@@ -88,10 +91,13 @@ describe TicTacToe::Input, ".ask_player_action" do
     let(:cell) { double(:cell, position:'quit') }
     before do
       allow(board).to receive(:get_empty_positions) { [cell, cell, cell] }
-      allow(subject).to receive(:select_position).and_call_original
     end
 
     context "when player is a computer" do
+      after do
+        subject.ask_player_action(computer, board)
+      end
+
       let(:computer) { TicTacToe::Player.new(A_COMPUTER_NAME, computer: true) }
 
       it "displays computer thinking message" do
@@ -99,11 +105,14 @@ describe TicTacToe::Input, ".ask_player_action" do
       end
 
       it "selects random position" do
-        expect(subject).to receive(:input_validation).with(cell.position).and_call_original
+        expect(subject).to receive(:input_validation).with(cell.position, board).and_call_original
       end
     end
 
     context "when player is not a computer" do
+      after do
+        subject.ask_player_action(player_1, board)
+      end
       it "displays select position message" do
         allow(TicTacToe::Display).to receive(:read_line) { 'quit' }
         expect(display).to receive(:display_msg_select_position)
@@ -116,6 +125,10 @@ describe TicTacToe::Input, ".ask_player_action" do
   end
 
   context "when player types an input" do
+    after do
+        subject.ask_player_action(player_1, board)
+    end
+
     context "when input is invalid" do
       shared_examples "re-ask position" do
         it "asks for input again" do
@@ -159,6 +172,10 @@ describe TicTacToe::Input, ".ask_player_action" do
 
       context "when input is a special option" do
         context "when input is 'quit'" do
+          before do
+            allow(subject).to receive(:select_position) { 'quit' }
+          end
+
           it_behaves_like "valid input"
 
           it "does not ask for input again" do

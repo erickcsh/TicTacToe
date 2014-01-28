@@ -26,7 +26,7 @@ module TicTacToe
 
     def self.ask_player_action(player, board)
       begin
-        input = Input.select_position(player, board.empty_positions)
+        input = Input.select_position(player, board.get_empty_positions)
         validated_input = Input.input_validation(input, board)
         Input.input_error_message(validated_input)
       end while !Input.valid?(validated_input)
