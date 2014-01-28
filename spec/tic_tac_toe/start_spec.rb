@@ -14,7 +14,9 @@ describe TicTacToe::Start, "#start" do
     allow(TicTacToe::Gameplay).to receive(:new) { gameplay }
     allow(display).to receive(:display_beginning_instructions) {}
     allow(TicTacToe::Display).to receive(:new) { display }
-    allow(TicTacToe::Display).to receive(:read_line) { '1' }
+    allow(TicTacToe::Input).to receive(:ask_mode) { 1 }
+    allow(TicTacToe::Input).to receive(:ask_name) { PLAYER_1 }
+    allow(TicTacToe::Input).to receive(:ask_replay) { 'n' }
     allow(TicTacToe::Player).to receive(:new) do |name, args|
       case name
       when PLAYER_1 then player_1
@@ -45,10 +47,8 @@ describe TicTacToe::Start, "#start" do
   context "in mode selection" do
 
     context "when one player mode selected" do
-      before { allow(TicTacToe::Display).to receive(:read_line).and_return('1', PLAYER_1, 'n') }
-
       it "asks once for player name" do
-        expect(display).to receive(:display_msg_ask_for_player_name).once
+        expect(TicTacToe::Input).to receive(:ask_name).once
       end
 
       it "starts game with a player and a computer" do
@@ -57,42 +57,25 @@ describe TicTacToe::Start, "#start" do
     end
 
     context "when two player mode selected" do
-      before { allow(TicTacToe::Display).to receive(:read_line).and_return('2', PLAYER_1, PLAYER_2, 'n') }
+      before do
+        allow(TicTacToe::Input).to receive(:ask_name).and_return(PLAYER_1, PLAYER_2)
+        allow(TicTacToe::Input).to receive(:ask_mode) { 2 }
+      end
 
       it "asks twice for player name" do
-        expect(display).to receive(:display_msg_ask_for_player_name).with(0)
-        expect(display).to receive(:display_msg_ask_for_player_name).with(1)
+        expect(TicTacToe::Input).to receive(:ask_name).once.with(0)
+        expect(TicTacToe::Input).to receive(:ask_name).once.with(1)
       end
 
       it "starts game with 2 players" do
         expect(TicTacToe::Gameplay).to receive(:new).with([player_1, player_2])
       end
     end
-
-    context "when invalid mode selected" do
-      before { allow(TicTacToe::Display).to receive(:read_line).and_return('3', '1', PLAYER_1, 'n') }
-
-      it "displays error message" do
-        expect(display).to receive(:display_error_msg_mode)
-      end
-    end
-
-    context "when valid mode selected" do
-      before { allow(TicTacToe::Display).to receive(:read_line).and_return('1', PLAYER_1, 'n') }
-
-      it "does not display error message" do
-        expect(display).not_to receive(:display_error_msg_mode)
-      end
-    end
   end
 
   context "when game finished" do
-    it "displays replay message" do
-      expect(display).to receive(:display_msg_replay)
-    end
-
     context "when wants to replay" do
-      before { allow(TicTacToe::Display).to receive(:read_line).and_return('1', PLAYER_1, 'y', 'n') }
+      before { allow(TicTacToe::Input).to receive(:ask_replay).and_return('y', 'n') }
 
       it "plays twice" do
         expect(subject).to receive(:start_game).twice
@@ -100,8 +83,6 @@ describe TicTacToe::Start, "#start" do
     end
 
     context "does not want replay" do
-      before { allow(TicTacToe::Display).to receive(:read_line).and_return('1', PLAYER_1,  'n') }
-
       it "plays once" do
         expect(subject).to receive(:start_game).once
       end

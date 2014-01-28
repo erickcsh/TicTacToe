@@ -5,6 +5,7 @@ require 'boards'
 describe TicTacToe::Checker, "#update" do
   let(:player) { Boards.player_1 }
   let(:gameplay) { double(:gameplay).as_null_object }
+  let(:board) { Boards.no_win_nor_draw_board }
 
   subject { described_class.new(gameplay) }
 
@@ -12,6 +13,10 @@ describe TicTacToe::Checker, "#update" do
 
   shared_examples "finish game" do
     it { expect(gameplay).to receive(:finish_game) }
+  end
+
+  it "sends message to gameplay with turn finished status" do
+    expect(gameplay).to receive(:finished_turn_status)
   end
 
   context "when there is a draw board" do
@@ -58,7 +63,7 @@ describe TicTacToe::Checker, "#update" do
     let(:board) { Boards.down_diagonal_win_board }
     it_behaves_like "finish game"
   end
-  
+
   context "when there is no win nor draw" do
     let(:board) { Boards.no_win_nor_draw_board }
     it "does not finish game" do

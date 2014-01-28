@@ -1,8 +1,6 @@
 module TicTacToe
   class Checker
 
-    attr_reader :win, :draw
-
     def initialize(gameplay)
       @win = false
       @draw = false
@@ -14,6 +12,7 @@ module TicTacToe
       @win = win?(args[:player])
   		@draw = draw? unless @win
       @gameplay.finish_game if (@win || @draw)
+      @gameplay.finished_turn_status(win: @win, draw: @draw)
     end
 
     private
