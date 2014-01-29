@@ -7,11 +7,11 @@ describe TicTacToe::Input, ".ask_name" do
 
   before do
     allow(TicTacToe::Display).to receive(:read_line) { PLAYER_1 }
-    TicTacToe::Input.class_variable_set :@@display, display
+    allow(TicTacToe::Display).to receive(:instance) { display }
   end
 
   after do
-    described_class.ask_name(0)
+    described_class.instance.ask_name(0)
   end
 
   it "displays enter player name message" do
@@ -27,12 +27,12 @@ describe TicTacToe::Input, ".ask_replay" do
   let(:display) { double(:display).as_null_object }
 
   before do
-    allow(TicTacToe::Display).to receive(:read_line) { 'Y' }
-    TicTacToe::Input.class_variable_set :@@display, display
+    allow(TicTacToe::Display).to receive(:read_line) { PLAYER_1 }
+    allow(TicTacToe::Display).to receive(:instance) { display }
   end
 
   after do
-    described_class.ask_replay
+    described_class.instance.ask_replay
   end
 
   it "displays replay message" do
@@ -48,12 +48,12 @@ describe TicTacToe::Input, ".ask_mode" do
   let(:display) { double(:display).as_null_object }
 
   before do
-    allow(TicTacToe::Display).to receive(:read_line) { A_VALID_MODE }
-    TicTacToe::Input.class_variable_set :@@display, display
+    allow(TicTacToe::Display).to receive(:read_line) { PLAYER_1 }
+    allow(TicTacToe::Display).to receive(:instance) { display }
   end
 
   after do
-    described_class.ask_mode
+    described_class.instance.ask_mode
   end
 
   context "when valid mode is selected" do
@@ -79,11 +79,11 @@ describe TicTacToe::Input, ".ask_player_action" do
   let(:board) { double(:board).as_null_object }
   let(:player_1) { Boards.player_1 }
 
-  subject { described_class }
+  subject { described_class.instance }
 
   before do
     allow(TicTacToe::Display).to receive(:read_line).and_return( 'quit')
-    TicTacToe::Input.class_variable_set :@@display, display
+    allow(TicTacToe::Display).to receive(:instance) { display }
     allow(Kernel).to receive(:rand) { 0 }
   end
 

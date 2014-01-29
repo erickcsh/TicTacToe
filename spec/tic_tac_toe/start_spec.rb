@@ -9,14 +9,16 @@ describe TicTacToe::Start, "#start" do
   let(:player_1) { double(:player_1).as_null_object }
   let(:player_2) { double(:player_2).as_null_object }
   let(:computer) { double(:computer).as_null_object }
+  let(:input) { double(:input).as_null_object }
 
   before do
     allow(TicTacToe::Gameplay).to receive(:new) { gameplay }
     allow(display).to receive(:display_beginning_instructions) {}
-    allow(TicTacToe::Display).to receive(:new) { display }
-    allow(TicTacToe::Input).to receive(:ask_mode) { 1 }
-    allow(TicTacToe::Input).to receive(:ask_name) { PLAYER_1 }
-    allow(TicTacToe::Input).to receive(:ask_replay) { 'n' }
+    allow(TicTacToe::Display).to receive(:instance) { display }
+    allow(TicTacToe::Input).to receive(:instance) { input }
+    allow(input).to receive(:ask_mode) { 1 }
+    allow(input).to receive(:ask_name) { PLAYER_1 }
+    allow(input).to receive(:ask_replay) { 'n' }
     allow(TicTacToe::Player).to receive(:new) do |name, args|
       case name
       when PLAYER_1 then player_1
@@ -48,7 +50,7 @@ describe TicTacToe::Start, "#start" do
 
     context "when one player mode selected" do
       it "asks once for player name" do
-        expect(TicTacToe::Input).to receive(:ask_name).once
+        expect(input).to receive(:ask_name).once
       end
 
       it "starts game with a player and a computer" do
@@ -58,13 +60,13 @@ describe TicTacToe::Start, "#start" do
 
     context "when two player mode selected" do
       before do
-        allow(TicTacToe::Input).to receive(:ask_name).and_return(PLAYER_1, PLAYER_2)
-        allow(TicTacToe::Input).to receive(:ask_mode) { 2 }
+        allow(input).to receive(:ask_name).and_return(PLAYER_1, PLAYER_2)
+        allow(input).to receive(:ask_mode) { 2 }
       end
 
       it "asks twice for player name" do
-        expect(TicTacToe::Input).to receive(:ask_name).once.with(0)
-        expect(TicTacToe::Input).to receive(:ask_name).once.with(1)
+        expect(input).to receive(:ask_name).once.with(0)
+        expect(input).to receive(:ask_name).once.with(1)
       end
 
       it "starts game with 2 players" do
@@ -75,7 +77,7 @@ describe TicTacToe::Start, "#start" do
 
   context "when game finished" do
     context "when wants to replay" do
-      before { allow(TicTacToe::Input).to receive(:ask_replay).and_return('y', 'n') }
+      before { allow(input).to receive(:ask_replay).and_return('y', 'n') }
 
       it "plays twice" do
         expect(subject).to receive(:start_game).twice

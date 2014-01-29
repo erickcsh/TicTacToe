@@ -14,9 +14,9 @@ module TicTacToe
     end
 
     def finished_turn_status(args = { win: false, draw: false })
-      @display.print_board(@board)
-      @display.display_msg_draw if args[:draw]
-      @display.display_msg_win(@players[@turn].name) if args[:win]
+      Display.instance.print_board(@board)
+      Display.instance.display_msg_draw if args[:draw]
+      Display.instance.display_msg_win(@players[@turn].name) if args[:win]
     end
 
     private
@@ -25,7 +25,6 @@ module TicTacToe
       @game_finished = false
       @board = Board.new
       @turn = Kernel.rand(2)
-      @display = Display.new
       @checker = Checker.new(self)
       @board.add_observer(@checker)
       set_players_symbols
@@ -37,14 +36,14 @@ module TicTacToe
     end
 
     def player_turn
-      @display.display_turn_status(@board, @players[@turn].name)
-      input = Input.ask_player_action(@players[@turn], @board)
+      Display.instance.display_turn_status(@board, @players[@turn].name)
+      input = Input.instance.ask_player_action(@players[@turn], @board)
       input_action(input)
     end
 
     def input_action(option)
       case option
-      when 'help' then @display.display_gameplay_instructions
+      when 'help' then Display.instance.display_gameplay_instructions
       when 'quit' then finish_game
       when 'reset' then reset
       else completed_player_move(option)

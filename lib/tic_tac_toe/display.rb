@@ -1,50 +1,48 @@
 require 'yaml'
+require 'singleton'
 
 module TicTacToe
   class Display
+    include Singleton
 
     MESSAGES_FILE = 'res/messages.yaml'
 
     attr_accessor :output, :input
 
-    def initialize(output = $stdout)
-      @output = output
-    end
-
     def print_board(board)
       clear_console
-      @output.puts "\t   A     B     C"
-      @output.puts board.rows.map.with_index{ |row, index| row_message(row, index) }.join
+      STDOUT.puts "\t   A     B     C"
+      STDOUT.puts board.rows.map.with_index{ |row, index| row_message(row, index) }.join
     end
 
     def clear_console
       clear = `clear`
-      @output.puts clear
+      STDOUT.puts clear
     end
 
     def display(msg_name, *args)
-      @output.puts YAML.load_file(MESSAGES_FILE)[msg_name]
+      STDOUT.puts YAML.load_file(MESSAGES_FILE)[msg_name]
       STDIN.gets if instructions?(msg_name)
     end
 
     def display_turn_status(board, player_name)
       print_board(board)
-      @output.puts "\n\n #{player_name} turn"
+      STDOUT.puts "\n\n #{player_name} turn"
     end
 
     def display_msg_ask_for_player_name(player_number)
-      @output.puts "Enter player #{player_number + 1} name"
+      STDOUT.puts "Enter player #{player_number + 1} name"
     end
 
     def display_msg_win(player_name)
-      @output.puts "#{player_name} won"
+      STDOUT.puts "#{player_name} won"
     end
 
     def display_msg_computer_thinking
-      @output.print "Thinking."
+      STDOUT.print "Thinking."
       2.times do
         Kernel.sleep(1)
-        @output.print "."
+        STDOUT.print "."
       end
     end
 

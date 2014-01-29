@@ -5,6 +5,7 @@ require 'boards'
 describe TicTacToe::Gameplay, "#play" do
   let(:display) { double(:display).as_null_object }
   let(:checker) { double(:checker).as_null_object }
+  let(:input) { double(:input).as_null_object }
   let(:board) { double(:board).as_null_object }
   let(:player_1) { Boards.player_1 }
   let(:player_2) { Boards.player_2 }
@@ -14,10 +15,11 @@ describe TicTacToe::Gameplay, "#play" do
 
   before do
     allow(TicTacToe::Board).to receive(:new) { board }
-    allow(TicTacToe::Display).to receive(:new) { display }
+    allow(TicTacToe::Display).to receive(:instance) { display }
     allow(TicTacToe::Checker).to receive(:new) { checker }
+    allow(TicTacToe::Input).to receive(:instance) { input }
     allow(Kernel).to receive(:rand) { 0 }
-    allow(TicTacToe::Input).to receive(:ask_player_action) { 'quit' }
+    allow(input).to receive(:ask_player_action) { 'quit' }
   end
 
   after do
@@ -41,7 +43,7 @@ describe TicTacToe::Gameplay, "#play" do
 
   context "when action is 'reset'" do
     before do
-      allow(TicTacToe::Input).to receive(:ask_player_action).and_return('reset' , 'quit')
+      allow(input).to receive(:ask_player_action).and_return('reset' , 'quit')
     end
 
     it "resets the game" do
@@ -51,7 +53,7 @@ describe TicTacToe::Gameplay, "#play" do
 
   context "when action is 'help'" do
     before do
-      allow(TicTacToe::Input).to receive(:ask_player_action).and_return('help', 'quit')
+      allow(input).to receive(:ask_player_action).and_return('help', 'quit')
       allow(display).to receive(:display_gameplay_instructions)
     end
 
@@ -62,7 +64,7 @@ describe TicTacToe::Gameplay, "#play" do
 
   context "when action is a position" do
     before do
-      allow(TicTacToe::Input).to receive(:ask_player_action).and_return(A_POSITION_STRING, 'quit')
+      allow(input).to receive(:ask_player_action).and_return(A_POSITION_STRING, 'quit')
     end
 
     it "fills the space in the board" do
@@ -95,7 +97,7 @@ describe TicTacToe::Gameplay, "#finished_turn_status" do
   subject { described_class.new(players) }
 
   before do
-    allow(TicTacToe::Display).to receive(:new) { display }
+    allow(TicTacToe::Display).to receive(:instance) { display }
     allow(Kernel).to receive(:rand) { 0 }
   end
 
