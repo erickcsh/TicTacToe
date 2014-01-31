@@ -31,7 +31,7 @@ module TicTacToe
     end
 
     def enter_players_name
-      @players_number.times { |count| @players[count] = console.input_name(count) }
+      @players_number.times { |count| @players[count] = console.input_name(player_number: count) }
     end
 
     def start_game

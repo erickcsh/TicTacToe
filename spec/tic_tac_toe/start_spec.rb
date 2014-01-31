@@ -53,8 +53,8 @@ describe TicTacToe::Start, "#start" do
       end
 
       it "asks twice for player name" do
-        expect(input).to receive(:input_name).once.with(0)
-        expect(input).to receive(:input_name).once.with(1)
+        expect(input).to receive(:input_name).once.with(player_number: 0)
+        expect(input).to receive(:input_name).once.with(player_number: 1)
       end
     end
   end

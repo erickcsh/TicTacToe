@@ -22,7 +22,7 @@ module TicTacToe
     end
 
     def finished_turn_status(args = { win: false, draw: false })
-      @ui.display_board(@board)
+      @ui.display_board(board: @board)
       @ui.display_msg_draw if args[:draw]
       @ui.display_msg_win(player_name: @players[@turn].name) if args[:win]
     end

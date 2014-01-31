@@ -4,6 +4,6 @@ TicTacToe in Ruby v.2.0.0
 
 To run:
 
-Place on directory TicTacToe and run:
+  Open project directory and type:
 
-	ruby tic_tac_toe.rb
+    bin/tic_tac_toe
