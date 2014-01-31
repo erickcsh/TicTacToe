@@ -1,18 +1,18 @@
 module TicTacToe
   class Checker
 
-    def initialize(gameplay)
+    def initialize
       @win = false
       @draw = false
-      @gameplay = gameplay
     end
 
     def update(args)
-      @board = args[:board].board
+      gameplay = args[:gameplay]
+      @board = gameplay.board.board
       @win = win?(args[:player])
   		@draw = draw? unless @win
-      @gameplay.finish_game if (@win || @draw)
-      @gameplay.finished_turn_status(win: @win, draw: @draw)
+      gameplay.finish_game if (@win || @draw)
+      gameplay.finished_turn_status(win: @win, draw: @draw)
     end
 
     private

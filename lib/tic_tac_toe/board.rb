@@ -1,8 +1,5 @@
-require 'observer'
-
 module TicTacToe
   class Board
-    include Observable
 
     attr_reader :board
 
@@ -12,25 +9,31 @@ module TicTacToe
     end
 
     def fill_board_space(position, player)
-      position = GridPosition.from_string(position)
-      @board[position.row][position.col].owner = player
-      changed
-      notify_observers({:board => self, :player => player})
+      cell = cell_from_position(position)
+      cell.owner = player
     end
 
     def position_empty?(position)
-      position = GridPosition.from_string(position)
-      @board[position.row][position.col].empty?
+      cell = cell_from_position(position)
+      cell.empty?
     end
 
     def get_empty_positions
       @board.each.reduce([]) { |positions, row| positions + row.select(&:empty?) }
     end
 
+    def self.valid_position_string?(selection)
+      selection.downcase.gsub(" ","").match(/^[abc],[123]$/)
+    end
+
     private
+    def cell_from_position(position)
+      @board.flatten.select { |cell| cell.position == position.downcase }[0]
+    end
+
     def empty_board
       [1,2,3].each.reduce([]) do |board, number| 
-        board << ['A','B','C'].each.reduce([]) do |row, letter|
+        board << ['a','b','c'].each.reduce([]) do |row, letter|
           row << Cell.new("#{letter},#{number}")
         end
       end

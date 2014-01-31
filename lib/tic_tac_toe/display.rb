@@ -7,17 +7,13 @@ module TicTacToe
 
     MESSAGES_FILE = 'res/messages.yaml'
 
-    attr_accessor :output, :input
+    attr_accessor :output
 
-    def print_board(board)
-      clear_console
+    def display_board(args)
+      board = args[:board]
+      Console.instance.clear_console
       STDOUT.puts "\t   A     B     C"
-      STDOUT.puts board.rows.map.with_index{ |row, index| row_message(row, index) }.join
-    end
-
-    def clear_console
-      clear = `clear`
-      STDOUT.puts clear
+      STDOUT.puts board.board.map.with_index{ |row, index| row_message(row, index) }.join
     end
 
     def display(msg_name, *args)
@@ -25,16 +21,19 @@ module TicTacToe
       STDIN.gets if instructions?(msg_name)
     end
 
-    def display_turn_status(board, player_name)
-      print_board(board)
+    def display_turn_status(args)
+      player_name = args[:player_name]
+      display_board(args)
       STDOUT.puts "\n\n #{player_name} turn"
     end
 
-    def display_msg_ask_for_player_name(player_number)
+    def display_msg_ask_for_player_name(args)
+      player_number = args[:player_number]
       STDOUT.puts "Enter player #{player_number + 1} name"
     end
 
-    def display_msg_win(player_name)
+    def display_msg_win(args)
+      player_name = args[:player_name]
       STDOUT.puts "#{player_name} won"
     end
 
@@ -44,10 +43,6 @@ module TicTacToe
         Kernel.sleep(1)
         STDOUT.print "."
       end
-    end
-
-    def self.read_line
-      STDIN.gets.chomp
     end
 
     def respond_to?(method, include_private = false)

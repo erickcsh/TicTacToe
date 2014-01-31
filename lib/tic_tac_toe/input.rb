@@ -10,22 +10,22 @@ module TicTacToe
     NOT_VALID_INPUT = 1
     NOT_EMPTY_INPUT_POSITION = 2
 
-    def ask_mode
-      Display.instance.display_modes_options
+    def input_mode
+      display.display_modes_options
       enter_mode
     end
 
-    def ask_name(player_number)
-      Display.instance.display_msg_ask_for_player_name(player_number)
-      Display.read_line
+    def input_name(args)
+      display.display_msg_ask_for_player_name(args)
+      input_line
     end
 
-    def ask_replay
-      Display.instance.display_msg_replay
-      Display.read_line.downcase
+    def input_replay
+      display.display_msg_replay
+      input_line.downcase
     end
 
-    def ask_player_action(player, board)
+    def input_player_action(player, board)
       begin
         input = select_position(player, board.get_empty_positions)
         validated_input = input_validation(input, board)
@@ -34,7 +34,15 @@ module TicTacToe
       input.downcase
     end
 
+    def input_line
+      STDIN.gets.chomp
+    end
+
     private
+    def display
+      Display.instance
+    end
+
     def select_position(player, posible_positions)
       if player.computer?
         select_random_position(posible_positions)
@@ -45,7 +53,7 @@ module TicTacToe
 
     def input_validation(input, board)
       return VALID_INPUT if quit_reset_option?(input)
-      if(GridPosition.valid_position_string?(input))
+      if(Board.valid_position_string?(input))
         board.position_empty?(input) ? VALID_INPUT : NOT_EMPTY_INPUT_POSITION
       else
         NOT_VALID_INPUT
@@ -54,13 +62,13 @@ module TicTacToe
 
     def select_random_position(posible_positions)
       index = Kernel.rand(posible_positions.size)
-      Display.instance.display_msg_computer_thinking
+      display.display_msg_computer_thinking
       posible_positions[index].position
     end
 
     def receive_player_input
-      Display.instance.display_msg_select_position
-      Display.read_line
+      display.display_msg_select_position
+      input_line
     end
 
     def valid?(validated_input)
@@ -70,9 +78,9 @@ module TicTacToe
     def input_error_message(validated_input)
      case validated_input
      when NOT_VALID_INPUT
-       Display.instance.display_msg_not_valid_input
+       display.display_msg_not_valid_input
      when NOT_EMPTY_INPUT_POSITION
-       Display.instance.display_msg_not_empty_position
+       display.display_msg_not_empty_position
      end 
     end
 
@@ -81,10 +89,10 @@ module TicTacToe
     end
 
     def enter_mode
-      mode = Display.read_line
+      mode = input_line
       while !valid_mode?(mode.to_i)
-        Display.instance.display_error_msg_mode
-        mode = Display.read_line
+        display.display_error_msg_mode
+        mode = input_line
       end
       mode.to_i
     end

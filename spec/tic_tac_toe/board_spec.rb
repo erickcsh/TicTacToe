@@ -2,7 +2,7 @@ require 'tic_tac_toe'
 require 'constants'
 
 def same_positions?(cells, positions)
-    cells.each_with_index.all? { |cell, index| cell.position == positions[index] }
+    cells.each_with_index.all? { |cell, index| cell.position.downcase == positions[index].downcase }
 end
 
 describe TicTacToe::Board, "#board" do
@@ -16,41 +16,25 @@ end
 describe TicTacToe::Board, "#fill_board_space" do
   let(:position) { double(:position, { row: 1, col: 1 }) }
   subject { described_class.new }
-  before do
-    allow(TicTacToe::GridPosition).to receive(:from_string).and_return(position)
-  end
-  
+
   it "assigns space to a player" do
-    subject.fill_board_space(A_POSITION, A_PLAYER)
+    subject.fill_board_space(A_POSITION_STRING, A_PLAYER)
     player = subject.board[position.row][position.col].owner
     expect(player).to eq A_PLAYER
-  end
-
-  it "calls changed" do
-    expect(subject).to receive(:changed)
-    subject.fill_board_space(A_POSITION, A_PLAYER)
-  end
-
-  it "calls notify_observers" do
-    expect(subject).to receive(:notify_observers)
-    subject.fill_board_space(A_POSITION, A_PLAYER)
   end
 end
 
 describe TicTacToe::Board, "#position_empty?" do
   let(:position) { double(:position, { row: 1, col: 1 }) }
   subject { described_class.new }
-  before do
-    allow(TicTacToe::GridPosition).to receive(:from_string).and_return(position)
-  end
-  
+
   context "when it is empty" do
-    it { expect(subject.position_empty?(A_POSITION)).to be_true }
+    it { expect(subject.position_empty?(A_POSITION_STRING)).to be_true }
   end
 
   context "when it is filled" do
-    before { subject.fill_board_space(A_POSITION, A_PLAYER) }
-    it { expect(subject.position_empty?(A_POSITION)).to be_false }
+    before { subject.fill_board_space(A_POSITION_STRING, A_PLAYER) }
+    it { expect(subject.position_empty?(A_POSITION_STRING)).to be_false }
   end
 end
 
@@ -80,5 +64,17 @@ describe TicTacToe::Board, "#get_empty_positions" do
     before { fill_positions(subject, ALL_POSITIONS, A_PLAYER) }
 
     it { expect(subject.get_empty_positions).to be_empty }
+  end
+end
+
+describe TicTacToe::Board, ".valid_position_string?" do
+  context "when the string is a valid position" do
+    subject { described_class.valid_position_string?(A_POSITION_STRING) }
+    it { should be_true }
+  end
+
+  context "when the string is not a valid position" do
+    subject { described_class.valid_position_string?(NOT_A_POSITION_STRING) }
+    it { should be_false }
   end
 end

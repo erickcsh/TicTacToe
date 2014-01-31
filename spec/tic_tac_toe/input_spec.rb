@@ -2,16 +2,18 @@ require 'tic_tac_toe'
 require 'constants'
 require 'boards'
 
-describe TicTacToe::Input, ".ask_name" do
+describe TicTacToe::Input, ".input_name" do
   let(:display) { double(:display).as_null_object }
 
+  subject { described_class.instance }
+
   before do
-    allow(TicTacToe::Display).to receive(:read_line) { PLAYER_1 }
     allow(TicTacToe::Display).to receive(:instance) { display }
+    allow(subject).to receive(:input_line)
   end
 
   after do
-    described_class.instance.ask_name(0)
+    subject.input_name(player_number: 0)
   end
 
   it "displays enter player name message" do
@@ -19,20 +21,22 @@ describe TicTacToe::Input, ".ask_name" do
   end
 
   it "reads player name" do
-    expect(TicTacToe::Display).to receive(:read_line)
+    expect(subject).to receive(:input_line)
   end
 end
 
-describe TicTacToe::Input, ".ask_replay" do
+describe TicTacToe::Input, ".input_replay" do
   let(:display) { double(:display).as_null_object }
 
+  subject { described_class.instance }
+
   before do
-    allow(TicTacToe::Display).to receive(:read_line) { PLAYER_1 }
     allow(TicTacToe::Display).to receive(:instance) { display }
+    allow(subject).to receive(:input_line) { 'n' }
   end
 
   after do
-    described_class.instance.ask_replay
+    subject.input_replay
   end
 
   it "displays replay message" do
@@ -40,23 +44,28 @@ describe TicTacToe::Input, ".ask_replay" do
   end
 
   it "reads replay answer" do
-    expect(TicTacToe::Display).to receive(:read_line)
+    expect(subject).to receive(:input_line)
   end
 end
 
-describe TicTacToe::Input, ".ask_mode" do
+describe TicTacToe::Input, ".input_mode" do
   let(:display) { double(:display).as_null_object }
 
+  subject { described_class.instance }
+
   before do
-    allow(TicTacToe::Display).to receive(:read_line) { PLAYER_1 }
     allow(TicTacToe::Display).to receive(:instance) { display }
   end
 
   after do
-    described_class.instance.ask_mode
+    subject.input_mode
   end
 
   context "when valid mode is selected" do
+    before do
+      allow(subject).to receive(:input_line).and_return(A_VALID_MODE)
+    end
+
     it "does not display error message" do
       expect(display).not_to receive(:display_error_msg_mode)
     end
@@ -64,7 +73,7 @@ describe TicTacToe::Input, ".ask_mode" do
 
   context "when invalid mode is selected" do
     before do
-      allow(TicTacToe::Display).to receive(:read_line).and_return( AN_INVALID_MODE, A_VALID_MODE)
+      allow(subject).to receive(:input_line).and_return(AN_INVALID_MODE, A_VALID_MODE)
     end
 
     it "displays error message" do
@@ -73,7 +82,7 @@ describe TicTacToe::Input, ".ask_mode" do
   end
 end
 
-describe TicTacToe::Input, ".ask_player_action" do
+describe TicTacToe::Input, ".input_player_action" do
   let(:display) { double(:display).as_null_object }
   let(:checker) { double(:checker).as_null_object }
   let(:board) { double(:board).as_null_object }
@@ -82,9 +91,9 @@ describe TicTacToe::Input, ".ask_player_action" do
   subject { described_class.instance }
 
   before do
-    allow(TicTacToe::Display).to receive(:read_line).and_return( 'quit')
     allow(TicTacToe::Display).to receive(:instance) { display }
     allow(Kernel).to receive(:rand) { 0 }
+    allow(subject).to receive(:input_line)
   end
 
   context "when asks for a position" do
@@ -95,7 +104,7 @@ describe TicTacToe::Input, ".ask_player_action" do
 
     context "when player is a computer" do
       after do
-        subject.ask_player_action(computer, board)
+        subject.input_player_action(computer, board)
       end
 
       let(:computer) { TicTacToe::Player.new(A_COMPUTER_NAME, computer: true) }
@@ -111,22 +120,22 @@ describe TicTacToe::Input, ".ask_player_action" do
 
     context "when player is not a computer" do
       after do
-        subject.ask_player_action(player_1, board)
+        subject.input_player_action(player_1, board)
       end
       it "displays select position message" do
-        allow(TicTacToe::Display).to receive(:read_line) { 'quit' }
+        allow(subject).to receive(:input_line) { 'quit' }
         expect(display).to receive(:display_msg_select_position)
       end
 
       it "reads player's input" do
-        expect(TicTacToe::Display).to receive(:read_line) { 'quit' }
+        expect(subject).to receive(:input_line) { 'quit' }
       end
     end
   end
 
   context "when player types an input" do
     after do
-        subject.ask_player_action(player_1, board)
+        subject.input_player_action(player_1, board)
     end
 
     context "when input is invalid" do
@@ -211,3 +220,12 @@ describe TicTacToe::Input, ".ask_player_action" do
     end
   end
 end
+
+describe TicTacToe::Input, "#input_line" do
+
+  it "reads the input and chops the \\n" do
+    allow(STDIN).to receive(:gets).and_return(AN_INPUT + "\n")
+    expect(described_class.instance.input_line).to eq(AN_INPUT)
+  end
+end
+
