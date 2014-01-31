@@ -5,7 +5,7 @@ module TicTacToe
   class Display
     include Singleton
 
-    MESSAGES_FILE = 'res/messages.yaml'
+    MESSAGES_FILE = File.join(File.dirname(__FILE__), '../../res/messages.yaml')
 
     attr_accessor :output
 

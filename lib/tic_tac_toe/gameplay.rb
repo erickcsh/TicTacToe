@@ -6,11 +6,11 @@ module TicTacToe
 
     attr_reader :board
 
-    def initialize(checker, ui, players)
-      create_players(players)
+    def initialize(checker, ui, players_name)
+      create_players(players_name)
       @ui = ui
       prepare_initial_conditions
-      self.add_observer(checker)
+      add_observer(checker)
     end
 
     def play
@@ -28,8 +28,8 @@ module TicTacToe
     end
 
     private
-    def create_players(players)
-      @players = players.map { |name| Player.new(name) }
+    def create_players(players_name)
+      @players = players_name.map { |name| Player.new(name) }
       @players << Player.new('Computer', computer: true) if @players.size == 1
     end
 

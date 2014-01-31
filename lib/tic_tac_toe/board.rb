@@ -28,7 +28,7 @@ module TicTacToe
 
     private
     def cell_from_position(position)
-      @board.flatten.select { |cell| cell.position == position.downcase }[0]
+      @board.flatten.find { |cell| cell.position == position.downcase }
     end
 
     def empty_board
