@@ -1,9 +1,10 @@
-Erick Castillo, Ian Barnor
+Erick Castillo
 
-TicTacToe in Ruby v.2.0.0
+TicTacToe in Ruby v.1.0.0
 
-To run:
+Installation:
 
-  Open project directory and type:
+  gem install tic_tac_toe_ecastillo
 
-    bin/tic_tac_toe
+Run:
+    tic_tac_toe
