@@ -7,4 +7,5 @@ Installation:
   gem install tic_tac_toe_ecastillo
 
 Run:
+
     tic_tac_toe
